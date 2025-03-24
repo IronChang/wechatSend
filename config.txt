@@ -21,7 +21,7 @@
 "anniversary1":{"anniversary":"2023-05-01"},
 
 # 在一起的日子
-"love_date":"2025-03-23",
+"love_date":"2025-04-23",
 # 相识的日子
 "love_date_1":"2024-08-01"
 
