@@ -109,7 +109,6 @@ def get_weather(province, city):
     air_quality = air_main.find("em").text + "-" + air_main.find("span").text
     # pm 2.5    10
     pm = air_main.find("div", attrs={"class": "aqi-map-style-tip"}).find("em").text
-    pm = 200
     if int(pm) > 100:
         pm = f"{pm} (😷建议佩戴KN95口罩)"
     hours24_main = my_soup.find("div", attrs={"class": "hours24-data-th-right"})
