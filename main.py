@@ -61,6 +61,8 @@ def get_weather(province, city):
     weatherinfo = response_json["weatherinfo"]
     # 天气
     weather = weatherinfo["weather"]
+    if "雨" in weather:
+        weather += "(☔记得添衣带雨具哦)"
     # 最高气温
     temp = weatherinfo["temp"]
     # 最低气温
@@ -107,8 +109,9 @@ def get_weather(province, city):
     air_quality = air_main.find("em").text + "-" + air_main.find("span").text
     # pm 2.5    10
     pm = air_main.find("div", attrs={"class": "aqi-map-style-tip"}).find("em").text
+    pm = int(pm) + 100
     if int(pm) > 100:
-        pm += " 😷 防护提示｜建议佩戴KN95口罩"
+        pm += " (😷建议佩戴KN95口罩)"
     hours24_main = my_soup.find("div", attrs={"class": "hours24-data-th-right"})
     # 日出时间  06:01
     sunrise = hours24_main.findAll("span")[0].text.split(" ")[1]
