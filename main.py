@@ -439,11 +439,11 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
     province, city)
 
 # 获取词霸每日金句
-# note_ch, note_en = get_ciba()
+note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
-note_ch, note_en = split_caihong_text(caihongpi)
+note_ch1, note_en2 = split_caihong_text(caihongpi)
 # 公众号推送消息
 for user in users:
-    send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_en, now_weather,
+    send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en2, now_weather,
                  wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, formatted_text)
 os.system("pause")
