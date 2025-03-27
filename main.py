@@ -111,7 +111,7 @@ def get_weather(province, city):
     pm = air_main.find("div", attrs={"class": "aqi-map-style-tip"}).find("em").text
     pm = 200
     if int(pm) > 100:
-        pm += " (😷建议佩戴KN95口罩)"
+        pm = f"{pm} (😷建议佩戴KN95口罩)"
     hours24_main = my_soup.find("div", attrs={"class": "hours24-data-th-right"})
     # 日出时间  06:01
     sunrise = hours24_main.findAll("span")[0].text.split(" ")[1]
