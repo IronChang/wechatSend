@@ -223,6 +223,25 @@ def caihongpi():
     json_data = response.json()
     return json_data.get('data', {}).get('text', '获取彩虹屁失败')
 
+def format_wechat_text(text, max_length=200):
+    """处理文本适配微信模板换行"""
+    # Step 1: 清理无效字符
+    cleaned = text.replace('\r', '').replace('<br>', '\n')
+    
+    # Step 2: 智能分段（每20字自动换行）
+    segments = []
+    current_line = ''
+    for char in cleaned:
+        if len(current_line) >= 20 and char in ('，', '。', '！', '？'):
+            segments.append(current_line)
+            current_line = ''
+        current_line += char
+    if current_line:
+        segments.append(current_line)
+    
+    # Step 3: 拼接换行符
+    return '\n'.join(segments[:10])[:max_length] 
+    
 def get_ciba():
     url = "http://open.iciba.com/dsapi/"
     headers = {
@@ -415,8 +434,9 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
+formatted_text = format_wechat_text(caihongpi)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_en, now_weather,
-                 wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, caihongpi)
+                 wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, formatted_text)
 os.system("pause")
