@@ -214,15 +214,14 @@ def get_birthday(birthday, year, today):
     return birth_day
     
 def caihongpi():
-    url = 'https://api.shadiao.pro/chp'
+    url = "https://api.shadiao.pro/chp"
     headers = {
         'Content-Type': 'application/json',
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
     }
     response = get(url,headers=headers)
-    print("Raw response:", response.text[:100]) 
-    res = response.json()["data"]
-    return res
+    json_data = response.json()
+    return json_data.get('data', {}).get('text', '获取彩虹屁失败')
 
 def get_ciba():
     url = "http://open.iciba.com/dsapi/"
