@@ -216,10 +216,11 @@ def get_birthday(birthday, year, today):
 def caihongpi():
     url = 'https://chp.shadiao.app/api.php'
     headers = {
+        'Content-Type': 'application/json',
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
     }
-    response = requests.get(url,headers=headers)
-    res = response.text
+    response = get(url,headers=headers)
+    res = response.json()["content"]
     return res
 
 def get_ciba():
