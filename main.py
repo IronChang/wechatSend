@@ -245,8 +245,8 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
     love_date = date(love_year, love_month, love_day)
     # 获取在一起的日期差
     love_days = str(today.__sub__(love_date)).split(" ")[0]
-    
-    
+
+
     # 获取相识的日子的日期格式
     love_year_1 = int(config["love_date_1"].split("-")[0])
     love_month_1 = int(config["love_date_1"].split("-")[1])
@@ -254,7 +254,7 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
     love_date_1 = date(love_year_1, love_month_1, love_day_1)
     # 获取相识的日期差
     love_days_1 = str(today.__sub__(love_date_1)).split(" ")[0]
-    
+
     # 获取所有生日数据和纪念日数据
     birthdays = {}
     anniversary = {}
@@ -352,8 +352,8 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
             birthday_data = "{}的生日还有{}天".format(value["name"], birth_day)
         # 将生日数据插入data
         data["data"][key] = {"value": birthday_data}
-        
-        
+
+
     for key, value in anniversary.items():
         anniversary_day = get_anniversary_day(value["anniversary"], year, today)
         if anniversary_day == 0:
@@ -362,7 +362,7 @@ def send_message(to_user, access_token, city_name, weather, max_temperature, min
             anniversary_data = "和宝贝贴贴还有{}天".format(anniversary_day)
         # 将纪念日插入data
         data["data"][key] = {"value": anniversary_data}
-        
+
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
