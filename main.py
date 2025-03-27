@@ -61,6 +61,8 @@ def get_weather(province, city):
     weatherinfo = response_json["weatherinfo"]
     # 天气
     weather = weatherinfo["weather"]
+    if "雨" in weather:
+    weather += "🌂 出行建议｜记得带雨具哦"
     # 最高气温
     temp = weatherinfo["temp"]
     # 最低气温
