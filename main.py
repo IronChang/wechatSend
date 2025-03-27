@@ -435,6 +435,7 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
 formatted_text = format_wechat_text(caihongpi)
+prinf(formatted_text)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_en, now_weather,
