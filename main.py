@@ -445,5 +445,5 @@ note_ch1, note_en2 = split_caihong_text(caihongpi)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en2, now_weather,
-                 wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, formatted_text)
+                 wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, greetings_today)
 os.system("pause")
