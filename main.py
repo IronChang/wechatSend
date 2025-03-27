@@ -10,6 +10,7 @@ from datetime import datetime, date
 from zhdate import ZhDate
 import sys
 import os
+import re
 
 
 def get_color():
@@ -223,24 +224,30 @@ def caihongpi():
     json_data = response.json()
     return json_data.get('data', {}).get('text', '获取彩虹屁失败')
 
-def format_wechat_text(text, max_length=200):
-    """处理文本适配微信模板换行"""
-    # Step 1: 清理无效字符
-    cleaned = text.replace('\r', '').replace('<br>', '\n')
+def split_caihong_text(text, max_length=20):
+    """智能分段彩虹屁文本"""
+    # 清理原始文本中的换行符
+    clean_text = text.replace('\n', '').strip()
     
-    # Step 2: 智能分段（每20字自动换行）
-    segments = []
-    current_line = ''
-    for char in cleaned:
-        if len(current_line) >= 20 and char in ('，', '。', '！', '？'):
-            segments.append(current_line)
-            current_line = ''
-        current_line += char
-    if current_line:
-        segments.append(current_line)
+    # 场景1: 直接满足长度要求
+    if len(clean_text) <= max_length:
+        return clean_text, ""
     
-    # Step 3: 拼接换行符
-    return '\n'.join(segments[:10])[:max_length] 
+    # 场景2: 查找最佳截断点
+    # 优先在标点符号处分割
+    punctuation = r'[，。！？、；]'
+    matches = list(re.finditer(punctuation, clean_text))
+    
+    # 寻找最后一个符合分割点的标点
+    for match in reversed(matches):
+        pos = match.end()
+        if pos <= max_length:
+            part1 = clean_text[:pos]
+            part2 = clean_text[pos:]
+            return part1.strip(), part2.strip()
+    
+    # 场景3: 无合适标点则按最大长度硬分割
+    return clean_text[:max_length], clean_text[max_length:] 
     
 def get_ciba():
     url = "http://open.iciba.com/dsapi/"
@@ -434,10 +441,9 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
-formatted_text = format_wechat_text(caihongpi)
-prinf(formatted_text)
+part，part2 = split_caihong_text(caihongpi)
 # 公众号推送消息
 for user in users:
-    send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_en, now_weather,
+    send_message(user, accessToken, city, weather, max_temperature, min_temperature, part, part2, now_weather,
                  wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, formatted_text)
 os.system("pause")
