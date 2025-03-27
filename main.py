@@ -212,7 +212,15 @@ def get_birthday(birthday, year, today):
         birth_date = year_date
         birth_day = str(birth_date.__sub__(today)).split(" ")[0]
     return birth_day
-
+    
+def caihongpi():
+    url = 'https://chp.shadiao.app/api.php'
+    headers = {
+        'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
+    }
+    response = requests.get(url,headers=headers)
+    res = response.text
+    return res
 
 def get_ciba():
     url = "http://open.iciba.com/dsapi/"
@@ -405,8 +413,9 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
+caihongpi = caihongpi()
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_en, now_weather,
-                 wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, greetings_today)
+                 wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, caihongpi)
 os.system("pause")
