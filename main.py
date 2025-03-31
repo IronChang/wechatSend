@@ -441,7 +441,7 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
-note_ch1 note_en1 = split_caihong_text(caihongpi)
+note_ch1, note_en1 = split_caihong_text(caihongpi)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en1, now_weather,
