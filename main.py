@@ -235,16 +235,16 @@ def split_caihong_text(text, max_length=20):
     
     # 场景2: 查找最佳截断点
     # 优先在标点符号处分割
-    punctuation = r'[，。！？、；]'
-    matches = list(re.finditer(punctuation, clean_text))
+    # punctuation = r'[，。！？、；]'
+    # matches = list(re.finditer(punctuation, clean_text))
     
     # 寻找最后一个符合分割点的标点
-    for match in reversed(matches):
-        pos = match.end()
-        if pos <= max_length:
-            part1 = clean_text[:pos]
-            part2 = clean_text[pos:]
-            return part1.strip(), part2.strip()
+    # for match in reversed(matches):
+    #    pos = match.end()
+    #    if pos <= max_length:
+    #        part1 = clean_text[:pos]
+    #        part2 = clean_text[pos:]
+    #        return part1.strip(), part2.strip()
     
     # 场景3: 无合适标点则按最大长度硬分割
     return clean_text[:max_length], clean_text[max_length:] 
@@ -441,8 +441,9 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
+note_ch1 note_en1 = split_caihong_text(caihongpi)
 # 公众号推送消息
 for user in users:
-    send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch, note_en, now_weather,
+    send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en1, now_weather,
                  wind_direction, air_humidity, ultraviolet_rays, air_quality, pm, sunrise, sunset, caihongpi)
 os.system("pause")
