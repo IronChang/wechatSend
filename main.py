@@ -249,6 +249,26 @@ def split_caihong_text(text, max_length=20):
     # 场景3: 无合适标点则按最大长度硬分割
     return clean_text[:max_length], clean_text[max_length:] 
     
+def split_caihong_text2(text, max_length=20):
+    """基础分段彩虹屁文本（硬分割为三部分）
+    
+    参数:
+        text: 原始文本
+        max_length: 每段最大长度（默认20）
+        
+    返回:
+        元组: (part1, part2, part3) 空余部分返回空字符串
+    """
+    clean_text = text.replace('\n', '').strip()
+    total_length = len(clean_text)
+    
+    # 直接按长度硬分割三段
+    part1 = clean_text[:max_length] if total_length > 0 else ""
+    part2 = clean_text[max_length:2*max_length] if total_length > max_length else ""
+    part3 = clean_text[2*max_length:3*max_length] if total_length > 2*max_length else ""
+    
+    return (part1, part2, part3) 
+    
 def get_ciba():
     url = "http://open.iciba.com/dsapi/"
     headers = {
@@ -441,7 +461,7 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
 caihongpi = caihongpi()
-note_ch1, note_en1 = split_caihong_text(caihongpi)
+note_ch1, note_en1, greetings_today1= split_caihong_text2(caihongpi)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en1, now_weather,
