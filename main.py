@@ -264,8 +264,8 @@ def split_caihong_text2(text, max_length=20):
     
     # 直接按长度硬分割三段
     part1 = clean_text[:max_length] if total_length > 0 else "今天没文案哦"
-    part2 = clean_text[max_length:2*max_length] if total_length > max_length else "只有我对你满心赤诚的爱意"
-    part3 = clean_text[2*max_length:3*max_length] if total_length > 2*max_length else "💖💖💖💖💖💖💖💖💖💖💖💖💖💖"
+    part2 = clean_text[max_length:2*max_length] if total_length > max_length else "You are my today and all of my tomorrows."
+    part3 = clean_text[2*max_length:3*max_length] if total_length > 2*max_length else "海底月是天上月，眼前人是心上人。"
     
     return (part1, part2, part3) 
     
