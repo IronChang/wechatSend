@@ -2,6 +2,7 @@ import random
 from time import time, localtime
 
 import requests
+from requests.exceptions import RequestException, JSONDecodeError
 from bs4 import BeautifulSoup
 
 import cityinfo
@@ -218,11 +219,24 @@ def caihongpi():
     url = "https://api.shadiao.pro/chp"
     headers = {
         'Content-Type': 'application/json',
-        'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36'
     }
-    response = get(url,headers=headers)
-    json_data = response.json()
-    return json_data.get('data', {}).get('text', '获取彩虹屁失败')
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()  # 自动检测4xx/5xx错误
+        json_data = response.json()
+        
+        # 双重安全校验：1.类型检查 2.安全字段访问
+        if isinstance(json_data.get('data'), dict):
+            return json_data['data'].get('text', "")
+        return ""
+        
+    except (RequestException, JSONDecodeError, AttributeError, KeyError):
+        # 覆盖所有潜在异常：
+        # 1.网络请求异常 2.JSON解析异常 
+        # 3.字段类型异常 4.键不存在异常
+        return ""
 
 def split_caihong_text(text, max_length=20):
     """智能分段彩虹屁文本"""
@@ -460,8 +474,8 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 
 # 获取词霸每日金句
 note_ch, note_en = get_ciba()
-# note_ch = caihongpi()
-note_ch1, note_en1, greetings_today1= split_caihong_text2(note_ch)
+caihongpi = caihongpi()
+note_ch1, note_en1, greetings_today1= split_caihong_text2(caihongpi)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en1, now_weather,
