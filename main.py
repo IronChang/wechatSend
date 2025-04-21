@@ -263,7 +263,7 @@ def split_caihong_text(text, max_length=20):
     # 场景3: 无合适标点则按最大长度硬分割
     return clean_text[:max_length], clean_text[max_length:] 
     
-def split_caihong_text2(text, max_length=20):
+def split_caihong_text2(text, note_ch, note_en, max_length=20):
     """基础分段彩虹屁文本（硬分割为三部分）
     
     参数:
@@ -278,8 +278,8 @@ def split_caihong_text2(text, max_length=20):
     
     # 直接按长度硬分割三段
     part1 = clean_text[:max_length] if total_length > 0 else "今天没文案哦"
-    part2 = clean_text[max_length:2*max_length] if total_length > max_length else "You are my today and all of my tomorrows."
-    part3 = clean_text[2*max_length:3*max_length] if total_length > 2*max_length else "海底月是天上月，眼前人是心上人。"
+    part2 = clean_text[max_length:2*max_length] if total_length > max_length else note_en
+    part3 = clean_text[2*max_length:3*max_length] if total_length > 2*max_length else note_ch
     
     return (part1, part2, part3) 
     
@@ -476,7 +476,7 @@ weather, max_temperature, min_temperature, now_weather, wind_direction, air_humi
 note_ch, note_en = get_ciba()
 caihongpi_text = caihongpi()
 split_source = caihongpi_text if caihongpi_text.strip() else note_ch
-note_ch1, note_en1, greetings_today1= split_caihong_text2(split_source)
+note_ch1, note_en1, greetings_today1= split_caihong_text2(split_source, note_ch, note_en)
 # 公众号推送消息
 for user in users:
     send_message(user, accessToken, city, weather, max_temperature, min_temperature, note_ch1, note_en1, now_weather,
