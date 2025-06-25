@@ -111,8 +111,10 @@ def get_weather(province, city):
     air_quality = air_main.find("em").text + "-" + air_main.find("span").text
     # pm 2.5    10
     pm = air_main.find("div", attrs={"class": "aqi-map-style-tip"}).find("em").text
-    if int(pm) > 100:
-        pm = f"{pm} (😷建议佩戴KN95口罩)"
+    if int(pm) > 150:
+        pm = f"{pm} (😷PM2.5重度污染，佩戴防护口罩，减少户外活动)"
+    elif int(pm) > 200:
+        pm = f"{pm} (😱PM2.5严重超标，关闭门窗，开启空气净化器)"
     hours24_main = my_soup.find("div", attrs={"class": "hours24-data-th-right"})
     # 日出时间  06:01
     sunrise = hours24_main.findAll("span")[0].text.split(" ")[1]
