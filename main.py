@@ -221,10 +221,7 @@ def get_birthday(birthday: str, today: date) -> int:
     parts = birthday.split("-")
     if len(parts) != 3:
         raise ValueError("格式应为'YYYY-MM-DD'（公历）或'rYYYY-MM-DD'（农历）")
-    print(f"当前日期：{today}")
-    print(f"{value['name']}的农历生日：农历{parts[1]}月{parts[2]}日")
-    print(f"转换为公历：{current_birthday}")
-    print(f"目标生日（今年/明年）：{target_birthday}")
+        
     year = today.year
     is_lunar = birthday.startswith("r")
     current_birthday = None  # 初始化今年生日的公历日期
