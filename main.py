@@ -64,7 +64,7 @@ def get_weather(province, city):
     # 天气
     weather = weatherinfo["weather"]
     if "雨" in weather:
-        weather += "(宝,☔记得添衣带雨具哦)"
+        weather += "(宝,☔记得保暖，不要感冒哦)"
     # 最高气温
     temp = weatherinfo["temp"]
     # 最低气温
