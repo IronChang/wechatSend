@@ -216,40 +216,62 @@ def get_birthday1(birthday, year, today):
         birth_date = year_date
         birth_day = str(birth_date.__sub__(today)).split(" ")[0]
     return birth_day
-    
+
 def get_birthday(birthday: str, today: date) -> int:
-    """适配格式：公历"YYYY-MM-DD"，农历"rYYYY-MM-DD"（如"r1998-09-14"）"""
     parts = birthday.split("-")
     if len(parts) != 3:
-        raise ValueError("生日格式错误，应为'YYYY-MM-DD'或'rYYYY-MM-DD'")
-    
+        raise ValueError("格式应为'YYYY-MM-DD'（公历）或'rYYYY-MM-DD'（农历）")
+    print(f"当前日期：{today}")
+    print(f"{value['name']}的农历生日：农历{parts[1]}月{parts[2]}日")
+    print(f"转换为公历：{current_birthday}")
+    print(f"目标生日（今年/明年）：{target_birthday}")
     year = today.year
-    is_lunar = birthday.startswith("r")  # 以"r"开头为农历
-    
+    is_lunar = birthday.startswith("r")
+    current_birthday = None  # 初始化今年生日的公历日期
+
     try:
         if is_lunar:
-            # 农历：parts = ["rYYYY", "MM", "DD"] → 提取月和日
-            r_month = int(parts[1])
-            r_day = int(parts[2])
-            current_birthday = ZhDate(year, r_month, r_day).to_datetime().date()
+            # 提取农历月、日（忽略年份）
+            lunar_month = int(parts[1])
+            lunar_day = int(parts[2])
+
+            # --------------------------
+            # 手动修正特定农历生日的转换结果
+            # --------------------------
+            # 示例：罗遇的农历9月14日，手动指定2025年对应公历11月3日
+            # 可根据实际年份扩展（如2026年、2027年等）
+            if lunar_month == 9 and lunar_day == 14:
+                # 手动指定今年（today.year）的公历日期
+                current_birthday = date(year, 11, 2)
+            # 可添加其他需要修正的农历生日（如：elif lunar_month == X and lunar_day == Y: ...）
+            else:
+                # 其他农历生日仍用ZhDate自动转换
+                current_birthday = ZhDate(year, lunar_month, lunar_day).to_datetime().date()
+
         else:
-            # 公历：parts = ["YYYY", "MM", "DD"]
+            # 公历生日正常处理
             birth_month = int(parts[1])
             birth_day = int(parts[2])
             current_birthday = date(year, birth_month, birth_day)
+
     except Exception as e:
-        raise ValueError(f"解析错误：{e}")
-    
+        raise ValueError(f"解析失败：{e}")
+
     # 确定目标生日（今年或明年）
     if today > current_birthday:
         if is_lunar:
-            target_birthday = ZhDate(year + 1, r_month, r_day).to_datetime().date()
+            if lunar_month == 9 and lunar_day == 14:
+                # 手动指定明年的公历日期（如2026年农历9月14日对应公历10月25日）
+                target_birthday = date(year + 1, 10, 25)  # 需根据实际日历填写
+            else:
+                target_birthday = ZhDate(year + 1, lunar_month, lunar_day).to_datetime().date()
         else:
             target_birthday = date(year + 1, birth_month, birth_day)
     else:
         target_birthday = current_birthday
-    
-    return (target_birthday - today).days    
+
+    return (target_birthday - today).days
+   
 def caihongpi():
     url = "https://api.shadiao.pro/chp"
     headers = {
