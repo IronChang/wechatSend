@@ -184,7 +184,7 @@ def get_anniversary_day(anniversary, year, today):
     return birth_day
 
 
-def get_birthday(birthday, year, today):
+def get_birthday1(birthday, year, today):
     birthday_year = birthday.split("-")[0]
     # 判断是否为农历生日
     if birthday_year[0] == "r":
@@ -217,6 +217,39 @@ def get_birthday(birthday, year, today):
         birth_day = str(birth_date.__sub__(today)).split(" ")[0]
     return birth_day
     
+def get_birthday(birthday: str, today: date) -> int:
+    """适配格式：公历"YYYY-MM-DD"，农历"rYYYY-MM-DD"（如"r1998-09-14"）"""
+    parts = birthday.split("-")
+    if len(parts) != 3:
+        raise ValueError("生日格式错误，应为'YYYY-MM-DD'或'rYYYY-MM-DD'")
+    
+    year = today.year
+    is_lunar = birthday.startswith("r")  # 以"r"开头为农历
+    
+    try:
+        if is_lunar:
+            # 农历：parts = ["rYYYY", "MM", "DD"] → 提取月和日
+            r_month = int(parts[1])
+            r_day = int(parts[2])
+            current_birthday = ZhDate(year, r_month, r_day).to_datetime().date()
+        else:
+            # 公历：parts = ["YYYY", "MM", "DD"]
+            birth_month = int(parts[1])
+            birth_day = int(parts[2])
+            current_birthday = date(year, birth_month, birth_day)
+    except Exception as e:
+        raise ValueError(f"解析错误：{e}")
+    
+    # 确定目标生日（今年或明年）
+    if today > current_birthday:
+        if is_lunar:
+            target_birthday = ZhDate(year + 1, r_month, r_day).to_datetime().date()
+        else:
+            target_birthday = date(year + 1, birth_month, birth_day)
+    else:
+        target_birthday = current_birthday
+    
+    return (target_birthday - today).days    
 def caihongpi():
     url = "https://api.shadiao.pro/chp"
     headers = {
